@@ -1,0 +1,10 @@
+{:itonami.blueprint/id "cloud-itonami-isco-5153"
+ :itonami.blueprint/name "Independent Building Caretaking Practice"
+ :itonami.blueprint/isco-08 "5153"
+ :itonami.blueprint/domain :services/building-caretaking
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:local-jobs :housing-quality :tenant-safety]
+ :itonami.blueprint/governor :building-caretaker-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:robotics :forms :telemetry :audit-ledger :bpmn]
+ :itonami.blueprint/status :public-oss}
