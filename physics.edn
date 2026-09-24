@@ -1,0 +1,33 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a building-inspection robot performs
+;; common-area monitoring, minor maintenance-support and utility-reading
+;; tasks. Declared here: the common-area inspection leg (corridor between
+;; stair cores, carrying its meter-reading and inspection kit), and draining
+;; the building's water receiving tank for its periodic cleaning -- the
+;; caretaker's maintenance-support job whose duration sets the water outage.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-5153"
+ :cases
+ [{:id :common-area-inspection-leg
+   :kind :transport
+   :procedure "inspection robot drives the common-area corridor between stair cores with its meter-reading kit"
+   :params {:mass-kg 45.0 :payload-kg 5.0 :v-max-mps 1.0 :a-max-mps2 0.5
+            :brake-decel-mps2 1.0 :drive-force-n 120.0 :crr 0.02
+            :cog-height-m 0.60 :support-half-length-m 0.25}
+   :sweep {:param :distance-m :values [20.0 40.0 70.0 100.0 150.0]}
+   :quantity :cycle-time-s
+   :limit {:max 90.0 :basis "estimate: per-corridor budget so one floor's round (two corridors, meter readings) fits the caretaker's hourly round"}
+   :boundary {:lo 5.0 :hi 300.0}}
+  {:id :receiving-tank-drain
+   :kind :tank-drain
+   :procedure "robot opens the drain valve of the water receiving tank so it can be cleaned; the tank must be empty to 5 cm"
+   :params {:tank-area-m2 6.0 :h0-m 1.8 :h-target-m 0.05 :cd 0.62 :q-in-m3s 0.0}
+   :sweep {:param :orifice-area-m2 :values [0.0005 0.001 0.002 0.003 0.005]}
+   :quantity :time-to-target-s
+   :limit {:max 3600.0 :basis "estimate: drain within one hour so the cleaning, refill and water test fit a half-day water outage notice"}
+   :boundary {:lo 0.0002 :hi 0.01}}]}
